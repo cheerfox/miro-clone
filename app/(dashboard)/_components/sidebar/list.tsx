@@ -8,7 +8,7 @@ export const List = () => {
     userMemberships: {
       infinite: true
     }
-  })
+  });
   return (
     <ul className="space-y-4">
       {userMemberships.data?.map((mem) => (

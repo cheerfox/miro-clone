@@ -8,7 +8,7 @@ interface FooterProps {
   isFavorite: boolean;
   onClick: () => void;
   disabled: boolean;
-};
+}
 
 export const Footer = ({
   title,
@@ -20,11 +20,11 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <div className="relative bg-white p-3">
-      <p className="text-[13px] truncate max-w-[calc(100%-20px)]">
-        {title}
-      </p>
-      <p className="opacity-0 group-hover:opacity-100
-      transition-opacity text-[11px] text-muted-foreground truncate">
+      <p className="text-[13px] truncate max-w-[calc(100%-20px)]">{title}</p>
+      <p
+        className="opacity-0 group-hover:opacity-100
+      transition-opacity text-[11px] text-muted-foreground truncate"
+      >
         {authorLabel}, {createdAtLabel}
       </p>
       <button
@@ -36,12 +36,9 @@ export const Footer = ({
         )}
       >
         <Star
-          className={cn(
-            "h-4 w-4",
-            isFavorite && "fill-blue-600 text-blue-600"
-          )}
+          className={cn("h-4 w-4", isFavorite && "fill-blue-600 text-blue-600")}
         />
       </button>
     </div>
   );
-}
+};

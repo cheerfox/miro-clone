@@ -19,25 +19,18 @@ export const EmptyBoard = () => {
       orgId: organization?.id,
       title: "Untitled"
     })
-    .then((id) => {
-      toast.success('Board Created');
-    })
-    .catch(() => {
-      toast.error('Something went wrong!');
-    })
-  }
+      .then((id) => {
+        toast.success("Board Created");
+      })
+      .catch(() => {
+        toast.error("Something went wrong!");
+      });
+  };
 
   return (
     <div className="h-full flex flex-col items-center justify-center">
-      <Image
-        src="/empty-board.svg"
-        height={110}
-        width={110}
-        alt="Empty"
-      />
-      <h2 className="text-2xl font-semibold mt-6">
-        Create your first board!
-      </h2>
+      <Image src="/empty-board.svg" height={110} width={110} alt="Empty" />
+      <h2 className="text-2xl font-semibold mt-6">Create your first board!</h2>
       <p className="text-muted-foreground text-sm mt-2">
         Start by creating a board for your organization
       </p>

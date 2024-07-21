@@ -1,7 +1,7 @@
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger
 } from "./ui/tooltip";
 
@@ -12,7 +12,7 @@ interface HintProps {
   align?: "start" | "center" | "end";
   sideOffset?: number;
   alignIffset?: number;
-};
+}
 
 export const Hint = ({
   label,
@@ -25,9 +25,7 @@ export const Hint = ({
   return (
     <TooltipProvider>
       <Tooltip delayDuration={100}>
-        <TooltipTrigger asChild>
-          {children}
-        </TooltipTrigger>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           className="text-white bg-black border-black"
           side={side}
@@ -35,11 +33,9 @@ export const Hint = ({
           sideOffset={sideOffset}
           alignOffset={alignIffset}
         >
-          <p className="font-semibold capitalize">
-            {label}
-          </p>
+          <p className="font-semibold capitalize">{label}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
-}
+  );
+};

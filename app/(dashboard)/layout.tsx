@@ -4,11 +4,9 @@ import { Sidebar } from "./_components/sidebar";
 
 interface DashboradLayoutProps {
   children: React.ReactNode;
-};
+}
 
-const DashboardLayout = ({
-  children
-}: DashboradLayoutProps) => {
+const DashboardLayout = ({ children }: DashboradLayoutProps) => {
   return (
     <main className="h-full">
       <Sidebar />

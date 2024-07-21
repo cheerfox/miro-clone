@@ -12,15 +12,15 @@ export const useApiMutation = (mutationFunction: any) => {
         setPending(false);
       })
       .then((result) => {
-        return result
+        return result;
       })
       .catch((error) => {
         throw error;
-      })
-  }
+      });
+  };
 
   return {
     mutate,
     pending
   };
-}; 
+};

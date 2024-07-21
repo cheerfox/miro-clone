@@ -1,7 +1,7 @@
- import { v } from "convex/values";
- import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+import { defineSchema, defineTable } from "convex/server";
 
- export default defineSchema({
+export default defineSchema({
   boards: defineTable({
     title: v.string(),
     orgId: v.string(),
@@ -13,5 +13,14 @@
     .searchIndex("search_title", {
       searchField: "title",
       filterFields: ["orgId"]
-    })
- });
+    }),
+
+  userFavorites: defineTable({
+    orgId: v.string(),
+    userId: v.string(),
+    boardId: v.id("boards")
+  })
+    .index("by_board", ["boardId"])
+    .index("by_user_org", ["userId", "orgId"])
+    .index("by_user_board", ["userId", "boardId"])
+});

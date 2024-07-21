@@ -1,4 +1,4 @@
-import {v} from "convex/values";
+import { v } from "convex/values";
 
 import { query } from "./_generated/server";
 
@@ -19,6 +19,6 @@ export const get = query({
       .order("desc")
       .collect();
 
-      return boards;
-  },
-})
+    return boards;
+  }
+});

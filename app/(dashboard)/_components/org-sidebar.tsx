@@ -12,25 +12,20 @@ import { useSearchParams } from "next/navigation";
 const font = Poppins({
   subsets: ["latin"],
   weight: ["600"]
-})
+});
 
 export const OrgSidebar = () => {
   const searchParams = useSearchParams();
   const favorites = searchParams.get("favorites");
   return (
-    <div className="hidden lg:flex flex-col
-     space-y-6 w-[206px] pl-5 pt-5">
+    <div
+      className="hidden lg:flex flex-col
+     space-y-6 w-[206px] pl-5 pt-5"
+    >
       <Link href="/">
         <div className="flex items-center gap-x-2">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            height={40}
-            width={40}
-          ></Image>
-          <span className={
-            cn("font-semibold text-2xl", font.className)
-          }>
+          <Image src="/logo.svg" alt="Logo" height={40} width={40}></Image>
+          <span className={cn("font-semibold text-2xl", font.className)}>
             Mirrors
           </span>
         </div>
@@ -75,10 +70,12 @@ export const OrgSidebar = () => {
           size="lg"
           className="font-normal justify-start px-2 w-full"
         >
-          <Link href={{
-            pathname: "/",
-            query: { favorites: true }
-          }}>
+          <Link
+            href={{
+              pathname: "/",
+              query: { favorites: true }
+            }}
+          >
             <Star className="h-4 w-4 mr-2" />
             Favoratite boards
           </Link>

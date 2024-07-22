@@ -10,6 +10,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Actions } from "@/components/actions";
 import { MoreHorizontalIcon } from "lucide-react";
 
+import { api } from "@/convex/_generated/api";
+import { useApiMutation } from "@/hooks/use-api-mutation";
+import { toast } from "sonner";
+
 interface BoardBardProps {
   id: string;
   title: string;
@@ -37,6 +41,26 @@ export const BoardCard = ({
     addSuffix: true
   });
 
+  // 解構的 alias 方法
+  const { mutate: onFavorite, pending: pendingFavorite } = useApiMutation(
+    api.board.favorite
+  );
+  const { mutate: onUnfavorite, pending: pendingUnFavorite } = useApiMutation(
+    api.board.unFavorite
+  );
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      onUnfavorite({ id }).catch(() => {
+        toast.error("Failed to unfavorite");
+      });
+    } else {
+      onFavorite({ id, orgId }).catch(() => {
+        toast.error("Failed to favorite");
+      });
+    }
+  };
+
   return (
     <Link href={`/boards/${id}`}>
       <div
@@ -60,8 +84,8 @@ export const BoardCard = ({
           title={title}
           authorLabel={authorLabel}
           createdAtLabel={createdAtLabel}
-          onClick={() => {}}
-          disabled={false}
+          onClick={toggleFavorite}
+          disabled={pendingFavorite || pendingUnFavorite}
         />
       </div>
     </Link>

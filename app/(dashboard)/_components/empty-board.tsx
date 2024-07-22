@@ -7,8 +7,10 @@ import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/use-api-mutation";
 import { api } from "@/convex/_generated/api";
 import { useOrganization } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export const EmptyBoard = () => {
+  const router = useRouter();
   const { mutate, pending } = useApiMutation(api.board.create);
   const { organization } = useOrganization();
 
@@ -21,6 +23,8 @@ export const EmptyBoard = () => {
     })
       .then((id) => {
         toast.success("Board Created");
+        router.push(`/board/${id}`)
+
       })
       .catch(() => {
         toast.error("Something went wrong!");

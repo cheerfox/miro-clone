@@ -97,7 +97,7 @@ export type CanvasState =
     }
   | {
       mode: CanvasMode.Pressing;
-      origin: Point
+      origin: Point;
     }
   | {
       mode: CanvasMode.SelectionNet;
@@ -134,3 +134,10 @@ export enum CanvasMode {
   Resizing,
   Pencil
 }
+
+export type Layer =
+  | RectangleLayer
+  | EllipseLayer
+  | PathLayer
+  | TextLayer
+  | NoteLayer;

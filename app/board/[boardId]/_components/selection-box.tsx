@@ -6,13 +6,13 @@ import { useSelf, useStorage } from "@liveblocks/react/suspense";
 import { memo } from "react";
 
 interface SelectionBoxProps {
-  onResizeHanlePointerDown: (corner: Side, initialBounds: XYWH) => void;
+  onResizeHandlePointerDown: (corner: Side, initialBounds: XYWH) => void;
 }
 
 const HANDLE_WIDTH = 8;
 
 export const SelectionBox = memo(function SelectionBox({
-  onResizeHanlePointerDown
+  onResizeHandlePointerDown
 }: SelectionBoxProps) {
   const soleLayerId = useSelf((me) =>
     me.presence.selection.length === 1 ? me.presence.selection[0] : null
@@ -59,6 +59,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Top + Side.Left, bounds);
             }}
           />
 
@@ -77,6 +78,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Top, bounds);
             }}
           />
 
@@ -95,6 +97,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Top + Side.Right, bounds);
             }}
           />
 
@@ -113,6 +116,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Right, bounds);
             }}
           />
 
@@ -131,6 +135,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Bottom + Side.Right, bounds);
             }}
           />
 
@@ -149,6 +154,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Bottom, bounds);
             }}
           />
 
@@ -167,6 +173,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Left + Side.Bottom, bounds);
             }}
           />
 
@@ -175,7 +182,7 @@ export const SelectionBox = memo(function SelectionBox({
             x={0}
             y={0}
             style={{
-              cursor: "nesw-resize",
+              cursor: "ew-resize",
               width: `${HANDLE_WIDTH}px`,
               height: `${HANDLE_WIDTH}px`,
               transform: `translate(
@@ -185,6 +192,7 @@ export const SelectionBox = memo(function SelectionBox({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              onResizeHandlePointerDown(Side.Left, bounds);
             }}
           />
         </>

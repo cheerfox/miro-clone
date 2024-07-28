@@ -8,7 +8,9 @@ import {
   CanvasState,
   Color,
   LayerType,
-  Point
+  Point,
+  Side,
+  XYWH
 } from "@/types/canvas";
 
 import {
@@ -24,7 +26,11 @@ import { Info } from "./info";
 import { Participants } from "./participants";
 import { Toolbar } from "./toolbar";
 import { CursorsPresence } from "./cursors-presence";
-import { connectionIdToColor, pointerEventToCanvasPoint } from "@/lib/utils";
+import {
+  connectionIdToColor,
+  pointerEventToCanvasPoint,
+  resizeBounds
+} from "@/lib/utils";
 import { LiveObject } from "@liveblocks/client";
 import { LayerPreview } from "./layer-peview";
 import { SelectionBox } from "./selection-box";
@@ -89,6 +95,43 @@ const Canvas = ({ boardId }: CanvasProps) => {
     [lastUsedColor] // 這邊為什麼要放 lastUsedColor
   );
 
+  const resizeSelectedLayer = useMutation(
+    ({ storage, self }, point: Point) => {
+      if (canvasState.mode !== CanvasMode.Resizing) {
+        return;
+      }
+
+      const bounds = resizeBounds(
+        canvasState.initialBounds,
+        canvasState.corner,
+        point
+      );
+
+      const liveLayers = storage.get("layers");
+      const layer = liveLayers.get(self.presence.selection[0]);
+
+      if (layer) {
+        layer.update(bounds);
+      }
+    },
+    [canvasState]
+  );
+
+  // click 的 reize rect
+  const onResizeHandlePointerDown = useCallback(
+    (corner: Side, initialBounds: XYWH) => {
+      console.log({ corner, initialBounds });
+
+      history.pause();
+      setCanvasState({
+        mode: CanvasMode.Resizing,
+        initialBounds,
+        corner
+      });
+    },
+    [history]
+  );
+
   // scroll 的 handler
   const onWheel = useCallback((e: React.WheelEvent) => {
     setCamera((camera) => ({
@@ -103,9 +146,14 @@ const Canvas = ({ boardId }: CanvasProps) => {
       e.preventDefault();
       const current = pointerEventToCanvasPoint(e, camera);
 
+      if (canvasState.mode === CanvasMode.Resizing) {
+        console.log("Resizing");
+        resizeSelectedLayer(current);
+      }
+
       setMyPresence({ cursor: current });
     },
-    []
+    [camera, canvasState, resizeSelectedLayer]
   );
 
   // 游標移開 canvas 後要把 cursor 消失
@@ -170,12 +218,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
 
       setCanvasState({ mode: CanvasMode.Translating, current: point });
     },
-    [
-      setCanvasState,
-      camera,
-      history,
-      canvasState.mode
-    ]
+    [setCanvasState, camera, history, canvasState.mode]
   );
 
   return (
@@ -210,9 +253,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
               selectionColor={layerIdToColorSelection[layerId]}
             />
           ))}
-          <SelectionBox
-            onResizeHandlePointerDown={() => {}}
-           />
+          <SelectionBox onResizeHandlePointerDown={onResizeHandlePointerDown} />
           <CursorsPresence />
         </g>
       </svg>

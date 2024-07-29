@@ -121,10 +121,14 @@ const Canvas = ({ boardId }: CanvasProps) => {
 
       setCanvasState({ mode: CanvasMode.Translating, current: point });
     },
-    [
-      canvasState
-    ]
+    [canvasState]
   );
+
+  const unselectLayers = useMutation(({ self, setMyPresence }) => {
+    if (self.presence.selection.length > 0) {
+      setMyPresence({ selection: [] }, { addToHistory: true });
+    }
+  }, []);
 
   const resizeSelectedLayer = useMutation(
     ({ storage, self }, point: Point) => {
@@ -195,6 +199,23 @@ const Canvas = ({ boardId }: CanvasProps) => {
     setMyPresence({ cursor: null });
   }, []);
 
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      console.log("on pointer down");
+
+      const point = pointerEventToCanvasPoint(e, camera);
+
+      if (canvasState.mode === CanvasMode.Inserting) {
+        return;
+      }
+
+      setCanvasState({ origin: point, mode: CanvasMode.Pressing });
+
+      // TODO: Add case for drawing
+    },
+    [camera, canvasState]
+  );
+
   // 有點像 mouse up
   const onPointerUp = useMutation(
     ({}, e) => {
@@ -205,7 +226,14 @@ const Canvas = ({ boardId }: CanvasProps) => {
         mode: canvasState.mode
       });
 
-      if (canvasState.mode === CanvasMode.Inserting) {
+      if (
+        canvasState.mode === CanvasMode.None ||
+        canvasState.mode === CanvasMode.Pressing
+      ) {
+        console.log("unselect");
+        unselectLayers();
+        setCanvasState({ mode: CanvasMode.None });
+      } else if (canvasState.mode === CanvasMode.Inserting) {
         insertLayer(canvasState.layerType, point);
       } else {
         setCanvasState({ mode: CanvasMode.None });
@@ -213,7 +241,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
 
       history.resume();
     },
-    [camera, canvasState, history, insertLayer]
+    [camera, canvasState, history, insertLayer, unselectLayers]
   );
 
   const selections = useOthersMapped((other) => other.presence.selection);
@@ -242,6 +270,8 @@ const Canvas = ({ boardId }: CanvasProps) => {
       }
 
       history.pause();
+
+      // 避免觸發到 svg 的 onPointerDown
       e.stopPropagation();
 
       const point = pointerEventToCanvasPoint(e, camera);
@@ -273,6 +303,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
         onPointerUp={onPointerUp}
+        onPointerDown={onPointerDown}
       >
         <g
           style={{

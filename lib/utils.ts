@@ -94,3 +94,10 @@ export function findIntersectingLayersWithRectangle(
   }
   return ids;
 }
+
+// 從背景顏色中算出要用色還是白色當作對比的文字顏色
+// code made ChatGPT
+export function getContrastingTextColor(color: Color) {
+  const luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+  return luminance > 182 ? "black" : "white";
+}

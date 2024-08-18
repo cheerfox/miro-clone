@@ -3,7 +3,7 @@ This is a collaborative, real-time whiteboard which was cloned from Miro (https:
 
 This project made by following "Code with Antonio"
 
-Website: https://miro-clone-hrd6c6u6m-cheerfoxs-projects.vercel.app/
+Website: https://miro-clone-ruddy.vercel.app/
 
 ## Tech Stack:
 - NextJS 14
